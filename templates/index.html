@@ -4,17 +4,66 @@
 		<title>FlaskChat</title>
 
 		<link rel="icon" type="image/png" href="{{ url_for ('static', filename='icons/favicon/favicon.ico') }}">
+
 		<link rel="stylesheet" type="text/css" href="{{url_for ('static', filename='css/index.css')}}">
+
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+		<script src="https://cdn.socket.io/4.1.2/socket.io.min.js" integrity="sha384-toS6mmwu70G0fw54EGlWWeA4z3dyJ+dlXBtSURSKN4vyRFOcxd3Bzjj/AoOwY+Rg" crossorigin="anonymous"></script>
+
 
 	</head>
 	<body>
-		<div class="chat-section-div">
+
+		<script type="text/javascript">
+
+			$(document).ready (function () {
+				// connect the socket with the server.
+				const socket = io.connect ("http://" + document.domain + ":" + location.port);
+				// whenever the page completely finishes loading.
+
+				$ ("input[type='button']").click (function () {
+
+					// grab the data from the input text field.
+					var message = document.getElementById("message-input").value;
+					var username = document.getElementById("username-input").value;
+
+					var data = {
+						username: username,
+						message: message
+					};
+
+					// fire client_message event.
+					socket.emit ("client_message", JSON.stringify (data));
+					console.log ("message sent to the server.", data);
+				});
+
+				socket.on ("server_response", function (json_message) {
+					// parse the json
+					var json_message = JSON.parse (json_message);
+
+					// get the json data.
+					var username = json_message["username"];
+					var message = json_message["message"];
+
+					// append username and message to the chat section.
+					$ ("#chat-section-div").append (`
+						<div>
+						<strong>${username}</strong>: ${message}
+						</div> 
+					`);
+				});
+			});
+
+		</script>
+
+		<div id="chat-section-div">
 			
 		</div>
 
 		<div class="message-box-div">
 			<form class="flex-container">
-				<input type="text" name="" id="username-input" placeholder="Username">
+				<input type="text" id="username-input" placeholder="Username">
 				<input type="text" placeholder="Type your message here." id="message-input">
 				<input type="button" value="Send.">
 			</form>

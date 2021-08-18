@@ -10,6 +10,7 @@ class Database:
 		# execute the query and save changes
 		self.cursor.execute (sql_query)
 		self.connector.commit ()
+		self.cursor.close ()
 
 	def close_connection (self):
 		# save the changes and commit 
@@ -22,13 +23,15 @@ def create_database ():
 	database.execute ("""CREATE TABLE AUTH (
 			Username VARCHAR (255) NOT NULL UNIQUE,
 			Password VARCHAR (255) NOT NULL
-		)""")
+		);
+		""")
 	# Create the chat table
 	database.execute ("""CREATE TABLE CHAT (
 			Username VARCHAR (255) NOT NULL,
 			Message TEXT NOT NULL
-		)
+		);
 		""")
+
 	# commit the changes
 	database.close_connection ()
 

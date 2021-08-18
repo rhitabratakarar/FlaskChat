@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 from flask import request
+from database import Database
 
 
 application = Flask (__name__)
@@ -26,8 +27,31 @@ def signup ():
 	if request.method == "GET":
 		return render_template ("signup.html")
 	else:
-		# method is "POST", thus register the user
-		...
+		# register the user.
+		username = request.form.get ("username")
+		password = request.form.get ("password")
+
+		query = f""" INSERT INTO AUTH (Username, Password)
+				VALUES ('{username}', '{password}'); """
+
+		database = Database ()
+		database.execute (query)
+
+		# save the changes in the database
+		database.close_connection ()
+		del database
+
+		return """
+			<!DOCTYPE html>
+			<html>
+			<head>
+				<title>Success</title>
+			</head>
+			<body>
+				<h1>Success.</h1>
+				Click <a href="/login">here</a> to go back to login page.
+			</body>
+			"""
 
 @application.route ("/chat")
 def chat ():

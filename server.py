@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
+from flask import request
 
 
 application = Flask (__name__)
@@ -9,8 +10,29 @@ socketio = SocketIO (application)
 
 @application.route ("/")
 def index ():
-	# the basic front page of the server.
+	# redirect the page to login.
 	return render_template ("index.html")
+
+@application.route ("/login", methods=["GET", "POST"])
+def login ():
+	if request.method == "GET":
+		return render_template ("login.html")
+	else:
+		# method is "POST"
+		...
+
+@application.route ("/signup", methods=["GET", "POST"])
+def signup ():
+	if request.method == "GET":
+		render_template ("signup.html")
+	else:
+		# method is "POST", thus register the user
+		...
+
+@application.route ("/chat")
+def chat ():
+	# the basic front page of the server.
+	return render_template ("chat.html")
 
 # when "client_message" occurs in client side
 @socketio.on ("client_message")

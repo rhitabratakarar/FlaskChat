@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>FlaskChat</title>
+	<link rel="icon" type="text/css" href="{{ url_for ('static', filename='icons/favicon/favicon.ico') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='css/login.css') }}">
+
+</head>
+
+<body>
+	<div class="container-div" style="border: solid 1px black; height: 97vh;">
+			<fieldset class="login-form">
+				<legend><strong>Login</strong></legend>
+				<form>
+					Username: <input type="text" name="username"><br><br>
+					Password: &nbsp<input type="password" name="password"><br><br>
+					<input type="submit" value="Continue">
+				</form>
+			</fieldset>
+		</div>
+	</div>
+</body>
+</html>

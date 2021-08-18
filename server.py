@@ -19,8 +19,36 @@ def login ():
 	if request.method == "GET":
 		return render_template ("login.html")
 	else:
-		# method is "POST"
-		...
+		# login the user.
+		username = request.form.get ("username")
+		password = request.form.get ("password")
+
+		# check whether the credentials exists or not.
+		query = f"""SELECT * FROM AUTH 
+			WHERE Username='{username}' AND Password='{password}';
+			"""
+
+		database = Database ()
+		database.execute (query)
+
+		cred = database.cursor.fetchone () # ('rintu', '1234')
+		database.close_connection ()
+
+		if not cred or cred != (username, password):
+			return """<!DOCTYPE html>
+			<html>
+			<head>
+				<title>Failure</title>
+			</head>
+			<body>
+				<h1>Wrong Credentials.</h1>
+				Click <a href="/login">here</a> to login again.
+			</body>
+			</html>"""
+
+		# make the username locked for the user.
+		else:
+			return "SUCCESS! NEED TO CHANGE CODE."
 
 @application.route ("/signup", methods=["GET", "POST"])
 def signup ():

@@ -10,11 +10,11 @@ class Database:
 		# execute the query and save changes
 		self.cursor.execute (sql_query)
 		self.connector.commit ()
-		self.cursor.close ()
 
 	def close_connection (self):
 		# save the changes and commit 
 		self.connector.commit ()
+		self.cursor.close ()
 		self.connector.close ()
 
 def create_database ():

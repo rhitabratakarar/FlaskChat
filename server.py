@@ -24,7 +24,7 @@ def login ():
 @application.route ("/signup", methods=["GET", "POST"])
 def signup ():
 	if request.method == "GET":
-		render_template ("signup.html")
+		return render_template ("signup.html")
 	else:
 		# method is "POST", thus register the user
 		...

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Signup</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='css/signup.css') }}">
+	<link rel="icon" href="{{ url_for ('static', filename='icons/favicon/favicon.ico') }}">
+</head>
+<body>
+	<div id="container-div">
+		<fieldset>
+			<legend><strong>Signup</strong></legend>
+			<form method="POST">
+				Username: <input type="text" name="username"><br><br>
+				Password: &nbsp<input type="password" name="password"><br><br>
+				<input type="submit" value="Signup">
+			</form>
+		</fieldset>
+	</div>
+</body>
+</html>

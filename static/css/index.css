@@ -2,3 +2,41 @@
 	height: 97vh;
 	border: 1px solid black;
 }
+.container-div > h1 {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	font-size: 50px;
+	margin: 0;
+}
+.container-div > h1 {
+	animation-name: animate;
+	animation-duration: 5s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-fill-mode: forwards;
+}
+@keyframes animate {
+	from {
+		color: #8594e6;
+	}
+	25% {
+		color: #5dc0c2;
+	}
+	50% {
+		color: #5ebf9a;
+	}
+	75% {
+		color: #92d193;
+	}
+	to {
+		color: #32a84e;
+	}
+}
+.container-div > nav > a {
+	text-decoration: none;
+	float: right;
+	margin: 10px;
+	color: #8a2be2;
+}

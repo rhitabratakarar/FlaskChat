@@ -1,6 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from flask_socketio import SocketIO
-from flask import request
+from flask import request, session, redirect
 from database import Database
 
 
@@ -17,9 +17,14 @@ def index ():
 @application.route ("/login", methods=["GET", "POST"])
 def login ():
 	if request.method == "GET":
-		return render_template ("login.html")
+		if "username" in session:
+			# if the user already logged in.
+			return redirect (url_for ("chat"))
+		else:
+			# if the user was not logged in and no session is created.
+			return render_template ("login.html")
 	else:
-		# login the user.
+		# login the user while request.method is "POST"
 		username = request.form.get ("username")
 		password = request.form.get ("password")
 
@@ -48,7 +53,10 @@ def login ():
 
 		# make the username locked for the user.
 		else:
-			return "SUCCESS! NEED TO CHANGE CODE."
+			# insert the username into session
+			session["username"] = username
+
+			return redirect (url_for ("chat"))
 
 @application.route ("/signup", methods=["GET", "POST"])
 def signup ():
@@ -84,7 +92,11 @@ def signup ():
 @application.route ("/chat")
 def chat ():
 	# the basic front page of the server.
-	return render_template ("chat.html")
+	if "username" in session:
+		username = session ["username"]
+		return render_template ("chat.html", username=username)
+	else:
+		return redirect (url_for ("index"))
 
 # when "client_message" occurs in client side
 @socketio.on ("client_message")

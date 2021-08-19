@@ -25,10 +25,10 @@
 
 					// grab the data from the input text field.
 					var message = document.getElementById("message-input").value;
-					var username = document.getElementById("username-input").value;
+					document.getElementById ("message-input").value = ""
 
 					var data = {
-						username: username,
+						username: "{{username}}",
 						message: message
 					};
 
@@ -57,12 +57,11 @@
 		</script>
 
 		<div id="chat-section-div">
-			
+			<!-- chats will be appearing here. -->
 		</div>
 
 		<div class="message-box-div">
 			<form class="flex-container">
-				<input type="text" id="username-input" placeholder="Username">
 				<input type="text" placeholder="Type your message here." id="message-input">
 				<input type="button" value="Send.">
 			</form>

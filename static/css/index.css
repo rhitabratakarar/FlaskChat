@@ -19,8 +19,8 @@ body {
 	user-select: none;
 }
 #login-button, #signup-button {
-	height: 5vh;
-	width: 7vw;
+	height: 40px;
+	width: 100px;
 	border-radius: 8px;
 	cursor: pointer;
 	outline: none;

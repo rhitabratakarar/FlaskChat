@@ -29,6 +29,7 @@ body {
 	background-color: #100b14;
 	color: white;
 	cursor: pointer;
+	transition: background-color 0.32s;
 }
 .login-form input[type="text"], .login-form input[type="password"] {
 	height: 5vh;
@@ -39,7 +40,7 @@ body {
 	color: white;
 	text-align: center;
 	transition-property: width;
-	transition-duration: 1s;
+	transition-duration: 0.4s;
 	transition-timing-function: ease-in-out;
 }
 .login-form input[type="text"] {
@@ -52,6 +53,5 @@ body {
 	width: 17vw;
 }
 .login-form > button:active {
-	background-color: #3ad406;
-	color: black;
+	background-color: #148530;
 }

@@ -15,16 +15,50 @@
 	<body>
 
 		<script type="text/javascript">
+			var messages_loaded = false;
+
+			function append_message (username, message) {
+
+				// append the message to the chat section.
+				$ ("#chat-section-div").append (`
+					<div>
+					<strong>${username}</strong>: ${message}
+					</div>
+				`);
+			}
 
 			$(document).ready (function () {
+
 				// connect the socket with the server.
 				const socket = io.connect ("http://" + document.domain + ":" + location.port);
-				// whenever the page completely finishes loading.
+
+				// ***###*** NEEDS REFACTORING! messages gets duplicated when a new client connects. ***###***
+
+				// load the previous messages.
+				socket.emit ("request_for_older_messages");
+
+				// server responded with the older messages
+				socket.on ("response_for_older_messages", function (json_messages) {
+
+					// parse the messages.
+					var json_messages = JSON.parse (json_messages);
+
+					// json_messages = [{username: <username>, message: <message>}, ...]
+					json_messages.forEach (function (json) {
+						let username = json['username'];
+						let message = json['message'];
+						// append the message into the chat section div.
+						append_message (username, message);
+					});
+					// stop listening for older messages.
+					socket.off ("response_for_older_messages");
+				});
 
 				$ ("input[type='button']").click (function () {
 
 					// grab the data from the input text field.
 					var message = document.getElementById("message-input").value;
+					// empty the message field.
 					document.getElementById ("message-input").value = ""
 
 					var data = {
@@ -32,9 +66,8 @@
 						message: message
 					};
 
-					// fire client_message event.
+					// fire client_message event and send data to the server.
 					socket.emit ("client_message", JSON.stringify (data));
-					console.log ("message sent to the server.", data);
 				});
 
 				socket.on ("server_response", function (json_message) {
@@ -46,25 +79,29 @@
 					var message = json_message["message"];
 
 					// append username and message to the chat section.
-					$ ("#chat-section-div").append (`
-						<div>
-						<strong>${username}</strong>: ${message}
-						</div> 
-					`);
+					append_message (username, message);
 				});
 			});
 
 		</script>
 
-		<div id="chat-section-div">
-			<!-- chats will be appearing here. -->
-		</div>
+		<div id="flex-screen-container">
 
-		<div class="message-box-div">
-			<form class="flex-container">
-				<input type="text" placeholder="Type your message here." id="message-input">
-				<input type="button" value="Send.">
-			</form>
+			<div id="chat-section-div">
+				<!-- chat messages will be appearing here. -->
+			</div>
+
+			<div class="message-box-div">
+
+				<form class="flex-form-container">
+
+					<input type="text" placeholder="Type your message here." id="message-input">
+					<input type="button" value="Send.">
+
+				</form>
+
+			</div>
+
 		</div>
 
 	</body>

@@ -17,16 +17,23 @@ class Database:
 		self.cursor.close ()
 		self.connector.close ()
 
+	def append_message (self, username, message):
+		sql_query = f"""INSERT INTO 
+						CHAT 
+						VALUES ('{username}', '{message}');"""						
+		self.execute (sql_query)
+
 def create_database ():
 	database = Database ()
+
 	# query to create the table
-	database.execute ("""CREATE TABLE AUTH (
+	database.execute ("""CREATE TABLE IF NOT EXISTS AUTH (
 			Username VARCHAR (255) NOT NULL UNIQUE,
 			Password VARCHAR (255) NOT NULL
 		);
 		""")
 	# Create the chat table
-	database.execute ("""CREATE TABLE CHAT (
+	database.execute ("""CREATE TABLE IF NOT EXISTS CHAT (
 			Username VARCHAR (255) NOT NULL,
 			Message TEXT NOT NULL
 		);

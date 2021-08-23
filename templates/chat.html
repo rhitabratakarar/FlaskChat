@@ -25,6 +25,10 @@
 					<strong>${username}</strong>: ${message}
 					</div>
 				`);
+
+				// scroll to the end message.
+				const chat_section = document.getElementById("chat-section-div");
+				chat_section.scrollTop = chat_section.scrollHeight;
 			}
 
 			$(document).ready (function () {

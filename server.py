@@ -103,7 +103,7 @@ def chat ():
 def logout ():
 	if "username" in session:
 		# deleting the session of the user.
-		session.pop ("username")
+		session.pop ("username", None)
 
 	# redirect the user to index page
 	return redirect (url_for ("index"))

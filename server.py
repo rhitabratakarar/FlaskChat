@@ -99,6 +99,16 @@ def chat ():
 	else:
 		return redirect (url_for ("index"))
 
+@application.route ("/logout")
+def logout ():
+	if "username" in session:
+		# deleting the session of the user.
+		session.pop ("username")
+
+	# redirect the user to index page
+	return redirect (url_for ("index"))
+
+
 @socketio.on ("client_message")
 def emit_to_everyone (message_data):
 

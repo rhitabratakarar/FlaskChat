@@ -54,20 +54,38 @@
 					socket.off ("response_for_older_messages");
 				});
 
-				$ ("input[type='button']").click (function () {
+				$ ("input[value='Send.']").click (function () {
 
 					// grab the data from the input text field.
 					var message = document.getElementById("message-input").value;
-					// empty the message field.
-					document.getElementById ("message-input").value = ""
 
-					var data = {
-						username: "{{username}}",
-						message: message
-					};
+					if (message === "") {
+						alert ("Message should not be empty.");
+					}
+					// to logout, type "/logout"
+					if (message === "/logout") {
+						confirmed = confirm ("You want to logout?");
 
-					// fire client_message event and send data to the server.
-					socket.emit ("client_message", JSON.stringify (data));
+						if (confirmed) {
+							window.location.href = "/logout";
+						}
+
+						// NEED TO WRITE MORE CODE....
+
+					}
+					else {
+
+						// empty the message field.
+						document.getElementById ("message-input").value = ""
+
+						var data = {
+							username: "{{username}}",
+							message: message
+						};
+
+						// fire client_message event and send data to the server.
+						socket.emit ("client_message", JSON.stringify (data));
+					}
 				});
 
 				socket.on ("server_response", function (json_message) {
@@ -93,12 +111,9 @@
 
 			<div class="message-box-div">
 
-				<form class="flex-form-container">
-
-					<input type="text" placeholder="Type your message here." id="message-input">
-					<input type="button" value="Send.">
-
-				</form>
+				<input type="text" placeholder="Type your message here." id="message-input">
+				
+				<input type="button" value="Send."id="send-button">
 
 			</div>
 

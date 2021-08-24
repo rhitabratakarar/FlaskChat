@@ -73,15 +73,12 @@
 						if (confirmed) {
 							window.location.href = "/logout";
 						}
-
-						// NEED TO WRITE MORE CODE....
-
 					}
 					else {
 
 						// empty the message field.
-						document.getElementById ("message-input").value = ""
-
+						document.getElementById ("message-input").value = "";
+						
 						var data = {
 							username: "{{username}}",
 							message: message

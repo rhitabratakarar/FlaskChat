@@ -1,76 +1,76 @@
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 body {
-	background-color: #0b080d;
-	overflow: hidden;
+  background-color: #0b080d;
+  overflow: hidden;
 }
 #chat-section-div {
-	height: calc(100vh - 60px);
-	margin-bottom: 0.4%;
-	padding: 1%;
-	overflow-y: scroll;
-	border: 3px solid #08fff3;
-	word-wrap: break-word;
-	color: white;
-	border-radius: 10px;
+  height: calc(100vh - 60px);
+  margin-bottom: 0.4%;
+  padding: 1%;
+  overflow-y: scroll;
+  border: 3px solid #08fff3;
+  word-wrap: break-word;
+  color: white;
+  border-radius: 10px;
 }
 ::-webkit-scrollbar {
-	position: absolute;
-	width: 8px;
-	left: -50px;
+  position: absolute;
+  width: 8px;
+  left: -50px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-	background-color: #0b080d; 
-	border-radius: 20px;
+  background-color: #0b080d; 
+  border-radius: 20px;
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-	background-color: #575659; 
-	border-radius: 20px;
+  background-color: #575659; 
+  border-radius: 20px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-	background-color: #76737a; 
+  background-color: #76737a; 
 }
 .message-box-div {
-	bottom: 30px;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
+  bottom: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 }
 #message-input {
-	height: 40px;
-	outline: none;
-	border: solid black 1px;
-	padding-left: 10px;
-	padding-right: 10px;
-	display: inline-block;
-	border-radius: 8px;
-	background-color: #0b080d;
-	color: white;
-	border: 3px solid #3ad406;
-	flex-grow: 20;
+  height: 40px;
+  outline: none;
+  border: solid black 1px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: inline-block;
+  border-radius: 8px;
+  background-color: #0b080d;
+  color: white;
+  border: 3px solid #3ad406;
+  flex-grow: 20;
 }
 #send-button {
-	height: 40px;
-	border: 3px solid #08fff3;
-	display: inline-block;
-	background-color: #0b080d;
-	color: white;
-	border-radius: 8px;
-	flex-grow: 1;
-	transition-property: background-color;
-	transition-duration: 0.25s;
-	transition-timing-function: ease-in-out;
-	margin-left: 5px;
-	cursor: pointer;
+  height: 40px;
+  border: 3px solid #08fff3;
+  display: inline-block;
+  background-color: #0b080d;
+  color: white;
+  border-radius: 8px;
+  flex-grow: 1;
+  transition-property: background-color;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  margin-left: 5px;
+  cursor: pointer;
 }
 #send-button:active {
-	/* when the button is clicked*/
-	background-color: #07d9cf;
+  /* when the button is clicked*/
+  background-color: #07d9cf;
 }

@@ -1,124 +1,124 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>FlaskChat</title>
+  <head>
+    <title>FlaskChat</title>
 
-		<link rel="icon" type="image/png" href="{{ url_for ('static', filename='icons/favicon/favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ url_for ('static', filename='icons/favicon/favicon.ico') }}">
 
-		<link rel="stylesheet" type="text/css" href="{{url_for ('static', filename='css/chat.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for ('static', filename='css/chat.css')}}">
 
-		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-		<script src="https://cdn.socket.io/4.1.2/socket.io.min.js" integrity="sha384-toS6mmwu70G0fw54EGlWWeA4z3dyJ+dlXBtSURSKN4vyRFOcxd3Bzjj/AoOwY+Rg" crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/4.1.2/socket.io.min.js" integrity="sha384-toS6mmwu70G0fw54EGlWWeA4z3dyJ+dlXBtSURSKN4vyRFOcxd3Bzjj/AoOwY+Rg" crossorigin="anonymous"></script>
 
-	</head>
-	<body>
+  </head>
+  <body>
 
-		<script type="text/javascript">
-			var messages_loaded = false;
+    <script type="text/javascript">
+      var messages_loaded = false;
 
-			function append_message (username, message) {
+      function append_message (username, message) {
 
-				// append the message to the chat section.
-				$ ("#chat-section-div").append (`
-					<div>
-					<strong>${username}</strong>: ${message}
-					</div>
-				`);
+        // append the message to the chat section.
+        $ ("#chat-section-div").append (`
+          <div>
+          <strong>${username}</strong>: ${message}
+          </div>
+        `);
 
-				// scroll to the end message.
-				const chat_section = document.getElementById("chat-section-div");
-				chat_section.scrollTop = chat_section.scrollHeight;
-			}
+        // scroll to the end message.
+        const chat_section = document.getElementById("chat-section-div");
+        chat_section.scrollTop = chat_section.scrollHeight;
+      }
 
-			$(document).ready (function () {
+      $(document).ready (function () {
 
-				// connect the socket with the server.
-				const socket = io.connect ("http://" + document.domain + ":" + location.port);
+        // connect the socket with the server.
+        const socket = io.connect ("http://" + document.domain + ":" + location.port);
 
-				// ***###*** NEEDS REFACTORING! messages gets duplicated when a new client connects. ***###***
+        // ***###*** NEEDS REFACTORING! messages gets duplicated when a new client connects. ***###***
 
-				// load the previous messages.
-				socket.emit ("request_for_older_messages");
+        // load the previous messages.
+        socket.emit ("request_for_older_messages");
 
-				// server responded with the older messages
-				socket.on ("response_for_older_messages", function (json_messages) {
+        // server responded with the older messages
+        socket.on ("response_for_older_messages", function (json_messages) {
 
-					// parse the messages.
-					var json_messages = JSON.parse (json_messages);
+          // parse the messages.
+          var json_messages = JSON.parse (json_messages);
 
-					// json_messages = [{username: <username>, message: <message>}, ...]
-					json_messages.forEach (function (json) {
-						let username = json['username'];
-						let message = json['message'];
-						// append the message into the chat section div.
-						append_message (username, message);
-					});
-					// stop listening for older messages.
-					socket.off ("response_for_older_messages");
-				});
+          // json_messages = [{username: <username>, message: <message>}, ...]
+          json_messages.forEach (function (json) {
+            let username = json['username'];
+            let message = json['message'];
+            // append the message into the chat section div.
+            append_message (username, message);
+          });
+          // stop listening for older messages.
+          socket.off ("response_for_older_messages");
+        });
 
-				$ ("input[value='Send.']").click (function () {
+        $ ("input[value='Send.']").click (function () {
 
-					// grab the data from the input text field.
-					var message = document.getElementById("message-input").value;
+          // grab the data from the input text field.
+          var message = document.getElementById("message-input").value;
 
-					if (message === "") {
-						alert ("Message should not be empty.");
-					}
-					// to logout, type "/logout"
-					if (message === "/logout") {
-						confirmed = confirm ("You want to logout?");
+          if (message === "") {
+            alert ("Message should not be empty.");
+          }
+          // to logout, type "/logout"
+          if (message === "/logout") {
+            confirmed = confirm ("You want to logout?");
 
-						if (confirmed) {
-							window.location.href = "/logout";
-						}
-					}
-					else {
+            if (confirmed) {
+              window.location.href = "/logout";
+            }
+          }
+          else {
 
-						// empty the message field.
-						document.getElementById ("message-input").value = "";
-						
-						var data = {
-							username: "{{username}}",
-							message: message
-						};
+            // empty the message field.
+            document.getElementById ("message-input").value = "";
+            
+            var data = {
+              username: "{{username}}",
+              message: message
+            };
 
-						// fire client_message event and send data to the server.
-						socket.emit ("client_message", JSON.stringify (data));
-					}
-				});
+            // fire client_message event and send data to the server.
+            socket.emit ("client_message", JSON.stringify (data));
+          }
+        });
 
-				socket.on ("server_response", function (json_message) {
-					// parse the json
-					var json_message = JSON.parse (json_message);
+        socket.on ("server_response", function (json_message) {
+          // parse the json
+          var json_message = JSON.parse (json_message);
 
-					// get the json data.
-					var username = json_message["username"];
-					var message = json_message["message"];
+          // get the json data.
+          var username = json_message["username"];
+          var message = json_message["message"];
 
-					// append username and message to the chat section.
-					append_message (username, message);
-				});
-			});
+          // append username and message to the chat section.
+          append_message (username, message);
+        });
+      });
 
-		</script>
+    </script>
 
-		<div id="flex-screen-container">
+    <div id="flex-screen-container">
 
-			<div id="chat-section-div">
-				<!-- chat messages will be appearing here. -->
-			</div>
+      <div id="chat-section-div">
+        <!-- chat messages will be appearing here. -->
+      </div>
 
-			<div class="message-box-div">
+      <div class="message-box-div">
 
-				<input type="text" placeholder="Type your message here." id="message-input">
-				
-				<input type="button" value="Send."id="send-button">
+        <input type="text" placeholder="Type your message here." id="message-input">
+        
+        <input type="button" value="Send."id="send-button">
 
-			</div>
+      </div>
 
-		</div>
+    </div>
 
-	</body>
+  </body>
 </html>

@@ -15,6 +15,7 @@ def index ():
         # redirect the page to login.
         return render_template ("index.html")
 
+
 @application.route ("/login", methods=["GET", "POST"])
 def login ():
         if request.method == "GET":
@@ -59,6 +60,7 @@ def login ():
 
                         return redirect (url_for ("chat"))
 
+
 @application.route ("/signup", methods=["GET", "POST"])
 def signup ():
         if request.method == "GET":
@@ -90,6 +92,7 @@ def signup ():
                         </body>
                         """
 
+
 @application.route ("/chat")
 def chat ():
         # the basic front page of the server.
@@ -98,6 +101,7 @@ def chat ():
                 return render_template ("chat.html", username=username)
         else:
                 return redirect (url_for ("index"))
+
 
 @application.route ("/logout")
 def logout ():

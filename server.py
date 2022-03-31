@@ -5,169 +5,177 @@ from database import Database
 import json
 
 
-application = Flask (__name__)
-application.config ["SECRET_KEY"] = "4as5x8xf7g"
-socketio = SocketIO (application)
+application = Flask(__name__)
+application.config["SECRET_KEY"] = "4as5x8xf7g"
+socketio = SocketIO(application)
 
 
-@application.route ("/")
-def index ():
-        # redirect the page to login.
-        return render_template ("index.html")
+def user_session_exists(session):
+    return "username" in session
+
+def get_user_creds_from_req(request):
+    username = request.form.get("username")
+    password = request.form.get("password")
+    return username, password
+
+def correct_credentials(*creds) -> bool:
+    query = f"""SELECT * FROM AUTH 
+            WHERE Username='{creds[0]}' AND Password='{creds[1]}';
+            """
+    database = Database()
+    database.execute(query)
+    db_creds = database.cursor.fetchone()
+    database.commit_and_close_connection()
+
+    return True if db_creds else False
+
+def get_wrong_creds_page() -> str:
+    return """<!DOCTYPE html>
+    <html>
+    <head>
+            <title>Failure</title>
+    </head>
+    <body>
+            <h1>Wrong Credentials.</h1>
+            Click <a href="/login">here</a> to login again.
+    </body>
+    </html>"""
 
 
-@application.route ("/login", methods=["GET", "POST"])
-def login ():
-        if request.method == "GET":
-                if "username" in session:
-                        # if the user already logged in.
-                        return redirect (url_for ("chat"))
-                else:
-                        # if the user was not logged in and no session is created.
-                        return render_template ("login.html")
+def create_new_user(*creds):
+    database = Database()
+    database.create_user(creds[0], creds[1])
+    database.commit_and_close_connection()
+    del database
+
+def get_success_page():
+    return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                    <title>Success</title>
+            </head>
+            <body>
+                    <h1>Success.</h1>
+                    Click <a href="/login">here</a> to go back to login page.
+            </body>
+            """
+
+def get_username(request):
+    return request.form.get("username")
+
+
+@application.route("/")
+@application.route("/home")
+@application.route("/index")
+def index():
+    return render_template("index.html")
+
+
+@application.route("/login", methods=["GET", "POST"])
+@application.route("/existing-user", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+
+        if user_session_exists(session):
+            return redirect(url_for("chat"))
         else:
-                # login the user while request.method is "POST"
-                username = request.form.get ("username")
-                password = request.form.get ("password")
+            return render_template("login.html")
 
-                # check whether the credentials exists or not.
-                query = f"""SELECT * FROM AUTH 
-                        WHERE Username='{username}' AND Password='{password}';
-                        """
+    else:
+        creds = get_user_creds_from_req(request)
 
-                database = Database ()
-                database.execute (query)
+        if not correct_credentials(*creds):
+            return get_wrong_creds_page()
 
-                cred = database.cursor.fetchone () # ('rintu', '1234')
-                database.close_connection ()
-
-                if not cred or cred != (username, password):
-                        return """<!DOCTYPE html>
-                        <html>
-                        <head>
-                                <title>Failure</title>
-                        </head>
-                        <body>
-                                <h1>Wrong Credentials.</h1>
-                                Click <a href="/login">here</a> to login again.
-                        </body>
-                        </html>"""
-
-                # make the username locked for the user.
-                else:
-                        # insert the username into session
-                        session["username"] = username
-
-                        return redirect (url_for ("chat"))
-
-
-@application.route ("/signup", methods=["GET", "POST"])
-def signup ():
-        if request.method == "GET":
-                return render_template ("signup.html")
         else:
-                # register the user.
-                username = request.form.get ("username")
-                password = request.form.get ("password")
-
-                query = f""" INSERT INTO AUTH (Username, Password)
-                                VALUES ('{username}', '{password}'); """
-
-                database = Database ()
-                database.execute (query)
-
-                # save the changes in the database
-                database.close_connection ()
-                del database
-
-                return """
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                                <title>Success</title>
-                        </head>
-                        <body>
-                                <h1>Success.</h1>
-                                Click <a href="/login">here</a> to go back to login page.
-                        </body>
-                        """
+            session["username"] = get_username(request)
+            return redirect(url_for("chat"))
 
 
-@application.route ("/chat")
-def chat ():
-        # the basic front page of the server.
-        if "username" in session:
-                username = session ["username"]
-                return render_template ("chat.html", username=username)
-        else:
-                return redirect (url_for ("index"))
+@application.route("/signup", methods=["GET", "POST"])
+@application.route("/new-user", methods=["GET", "POST"])
+def signup():
+    if request.method == "GET":
+        return render_template("signup.html")
+    else:
+        creds = get_user_creds_from_req(request)
+        create_new_user(*creds)
+        return get_success_page()
 
 
-@application.route ("/logout")
-def logout ():
-        if "username" in session:
-                # deleting the session of the user.
-                session.pop ("username", None)
-
-        # redirect the user to index page
-        return redirect (url_for ("index"))
+@application.route("/chat")
+def chat():
+    if user_session_exists(session):
+        return render_template("chat.html", username=session["username"])
+    else:
+        return redirect(url_for("index"))
 
 
-@socketio.on ("client_message")
-def emit_to_everyone (message_data):
+@application.route("/logout")
+def logout():
+    if user_session_exists(session):
+        session.pop("username", None)
 
-        # message_data = {username: <username>, message: <message>}
-        message = json.loads (message_data)
+    return redirect(url_for("index"))
 
-        usr = message ['username']
-        msg = message ['message']
 
-        query = f"""INSERT INTO CHAT 
-                                VALUES ('{usr}', '{msg}')"""
+@socketio.on("client_message")
+def emit_to_everyone(message_data):
 
-        # insert it into database.
-        database_obj = Database ()
-        database_obj.execute (query)
+    # message_data = {username: <username>, message: <message>}
+    message = json.loads(message_data)
 
-        # close the connection
-        database_obj.close_connection ()
-        del database_obj
+    usr = message['username']
+    msg = message['message']
 
-        # send "my response" back to the client.
-        socketio.emit ("server_response", message_data)
+    query = f"""INSERT INTO GLOBAL
+                            VALUES ('{usr}', '{msg}')"""
 
-@socketio.on ("request_for_older_messages")
-def response_for_older_messages ():
+    # insert it into database.
+    database_obj = Database()
+    database_obj.execute(query)
 
-        database_obj = Database ()
-        query = """SELECT * FROM CHAT"""
-        # execute the query to fetch the messages
+    # close the connection
+    database_obj.commit_and_close_connection()
+    del database_obj
 
-        database_obj.execute (query)
-        all_messages = database_obj.cursor.fetchall ()
-        # all_messages = (('username', 'message'), ('username', 'message'))
+    # send "my response" back to the client.
+    socketio.emit("server_response", message_data)
 
-        database_obj.close_connection ()
-        del database_obj
 
-        json_messages = []
-        # json_messages = [{username: message}, {username, message}, ...]
+@socketio.on("request_for_older_messages")
+def response_for_older_messages():
 
-        # convert the tuple into dictionary
-        for tup in all_messages:
-                username = tup[0]
-                message = tup[1]
+    database_obj = Database()
+    query = """SELECT * FROM GLOBAL"""
+    # execute the query to fetch the messages
 
-                # encapsulate it inside dictionary.
-                json_messages.append ({"username": username, "message": message})
+    database_obj.execute(query)
+    all_messages = database_obj.cursor.fetchall()
+    # all_messages = (('username', 'message'), ('username', 'message'))
 
-        # convert it into json string.
-        json_messages = json.dumps (json_messages)
+    database_obj.commit_and_close_connection()
+    del database_obj
 
-        # send the messages with a custom event
-        socketio.emit ("response_for_older_messages", json_messages)
+    json_messages = []
+    # json_messages = [{username: message}, {username, message}, ...]
+
+    # convert the tuple into dictionary
+    for tup in all_messages:
+            username = tup[0]
+            message = tup[1]
+
+            # encapsulate it inside dictionary.
+            json_messages.append({"username": username, "message": message})
+
+    # convert it into json string.
+    json_messages = json.dumps(json_messages)
+
+    # send the messages with a custom event
+    socketio.emit("response_for_older_messages", json_messages)
 
 
 if __name__ == "__main__":
-        # socket created at default port = 5000
-        socketio.run (application, debug=True)
+    # socket created at default port = 5000
+    socketio.run(application, debug=True)

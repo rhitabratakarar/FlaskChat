@@ -1,47 +1,35 @@
 import sqlite3
+from components.table_creator import TableCreator
+
 
 class Database:
-        def __init__ (self):
-                # open connection to the database
-                self.connector = sqlite3.connect ("database.db")
-                self.cursor = self.connector.cursor ()
+    def __init__(self):
+        self.connector = sqlite3.connect("database.db")
+        self.cursor = self.connector.cursor()
 
-        def execute (self, sql_query):
-                # execute the query and save changes
-                self.cursor.execute (sql_query)
-                self.connector.commit ()
+    def execute(self, sql_query):
+        self.cursor.execute(sql_query)
+        self.connector.commit()
 
-        def close_connection (self):
-                # save the changes and commit 
-                self.connector.commit ()
-                self.cursor.close ()
-                self.connector.close ()
+    def commit_and_close_connection(self):
+        self.connector.commit()
+        self.cursor.close()
+        self.connector.close()
 
-        def append_message (self, username, message):
-                sql_query = f"""INSERT INTO 
-                                                CHAT 
-                                                VALUES ('{username}', '{message}');"""                                          
-                self.execute (sql_query)
+    def append_message_into_global(self, username, message):
+        sql_query = f"""INSERT INTO
+                        GLOBAL
+                        VALUES ('{username}', '{message}');"""
+        self.execute(sql_query)
 
-def create_database ():
-        database = Database ()
-
-        # query to create the table
-        database.execute ("""CREATE TABLE IF NOT EXISTS AUTH (
-                        Username VARCHAR (255) NOT NULL UNIQUE,
-                        Password VARCHAR (255) NOT NULL
-                );
-                """)
-        # Create the chat table
-        database.execute ("""CREATE TABLE IF NOT EXISTS CHAT (
-                        Username VARCHAR (255) NOT NULL,
-                        Message TEXT NOT NULL
-                );
-                """)
-
-        # commit the changes
-        database.close_connection ()
+    def create_user(self, username: str, password: str):
+        query = f""" INSERT INTO AUTH (Username, Password)
+                            VALUES ('{username}', '{password}'); """
+        self.execute(query)
 
 
-if __name__ == "__main__":
-        create_database ()
+database = Database()
+table_creator = TableCreator(database)
+
+table_creator.create_table_structures()
+database.commit_and_close_connection()

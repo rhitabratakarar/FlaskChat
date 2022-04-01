@@ -12,58 +12,58 @@
     <title>Flaskchat</title>
 </head>
 <body>
-    <div id="container">
+  <div id="container">
 
-        <div class="left">
+    <div class="left">
 
-            <div id="images" class="flex flex-center col zero-pad zero-margin full-height">
-                <div class="item"></div>
-                <div class="item"></div>
-                <img src="{{url_for('static', filename='icons/pfHd2YT.png')}}" id="logo" alt="" class="item noselect nodrag">
-                <div class="item"></div>
-                <img src="{{url_for('static', filename='icons/z0OluCG.png')}}" id="bottom_illus" alt="" class="item noselect nodrag">
-            </div>
+      <div id="images" class="flex flex-center col zero-pad zero-margin full-height">
+          <div class="item"></div>
+          <div class="item"></div>
+          <img src="{{url_for('static', filename='icons/pfHd2YT.png')}}" id="logo" alt="" class="item noselect nodrag">
+          <div class="item"></div>
+          <img src="{{url_for('static', filename='icons/z0OluCG.png')}}" id="bottom_illus" alt="" class="item noselect nodrag">
+      </div>
 
-        </div>
-
-        <div class="right flex col zero-pad">
-
-          <div class="flex-center auto-margin">
-            <h3 class="center-text">Sign Up</h3>
-
-            <div class="center-text small-margin">
-              <p class="small-text center inline-block">Already have an account?</p>
-              <a href="/login" class="inline-block small-text">Log In</a>
-            </div>
-
-            <form>
-              <div class="left-text big-top-margin">
-                <label for="username" class="small-text bold margin-bottom-zero">Username</label><br>
-                <input type="text" id="username" name="username" class="round-gray-border small-text">
-              </div>
-
-              <div class="left-text big-top-margin">
-                <label for="password" class="small-text bold margin-bottom-zero">Password</label><br>
-                <input type="password" name="password" id="password" placeholder="Must be at least 6 characters" class="round-gray-border small-text">
-              </div>
-
-              <div class="left-text big-top-margin">
-                <label for="con_pass" class="small-text bold margin-bottom-zero">Confirm Password</label><br>
-                <input type="password" name="con_pass" id="con_pass" class="round-gray-border small-text">
-              </div>
-
-              <div class="center-text big-top-margin">
-                <button id="signup-button" onclick="validatePassword()">SIGN UP</button>
-              </div>
-
-              <div class="center-text small-text small-margin"> 
-                <p class="small-text margin-bottom-zero">By Continuing, you agree to accept our</p>
-                <p class="small-text margin-bottom-zero">Privacy Policy & Terms of Services.</p>
-              </div>
-            </form>
-          </div>
-        </div>
     </div>
-    <script src="{{url_for('static', filename='js/script.js')}}"></script>
+
+    <div class="right flex col zero-pad">
+
+      <div class="flex-center auto-margin">
+
+        <h3 class="center-text">Sign Up</h3>
+
+        <div class="center-text small-margin">
+          <p class="small-text center inline-block">Already have an account?</p>
+          <a href="/login" class="inline-block small-text">Log In</a>
+          <p id="result" class="small-text"></p>
+        </div>
+
+        <div class="left-text big-top-margin">
+          <label for="username" class="noselect small-text bold margin-bottom-zero">Username</label><br>
+          <input type="text" id="username" name="username" class="round-gray-border small-text">
+        </div>
+
+        <div class="left-text big-top-margin">
+          <label for="password" class="small-text bold margin-bottom-zero noselect">Password</label><br>
+          <input type="password" name="password" id="password" placeholder="Must be at least 6 characters" class="round-gray-border small-text">
+        </div>
+
+        <div class="left-text big-top-margin">
+          <label for="con_pass" class="small-text bold margin-bottom-zero noselect">Confirm Password</label><br>
+          <input type="password" name="con_pass" id="con_pass" class="round-gray-border small-text">
+        </div>
+
+        <div class="center-text big-top-margin">
+          <button id="signup-button" onclick="validatePasswordAndSubmit()">SIGN UP</button>
+        </div>
+
+        <div class="center-text small-text small-margin"> 
+          <p class="small-text margin-bottom-zero">By Continuing, you agree to accept our</p>
+          <p class="small-text margin-bottom-zero">Privacy Policy & Terms of Services.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{{url_for('static', filename='js/script.js')}}"></script>
 </body>
 </html>

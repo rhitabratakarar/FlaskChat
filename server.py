@@ -3,6 +3,7 @@ from flask_socketio import SocketIO
 from flask import request, session, redirect
 from database import Database
 import json
+import sqlite3
 
 
 application = Flask(__name__)
@@ -32,13 +33,13 @@ def correct_credentials(*creds) -> bool:
 def wrong_creds_page() -> str:
     return """<!DOCTYPE html>
         <html>
-        <head>
-            <title>Failure</title>
-        </head>
-        <body>
-            <h1>Wrong Credentials.</h1>
-            Click <a href="/login">here</a> to login again.
-        </body>
+            <head>
+                <title>Failure</title>
+            </head>
+            <body>
+                <h1>Wrong Credentials.</h1>
+                Click <a href="/login">here</a> to login again.
+            </body>
         </html>
     """
 
@@ -48,20 +49,30 @@ def build_session_for_user(creds):
 def create_new_user(*creds):
     database = Database()
     database.create_user(creds[0], creds[1])
+    print("user created")
     database.commit_and_close_connection()
 
 def get_success_page():
     return """
             <!DOCTYPE html>
             <html>
-            <head>
-                <title>Success</title>
-            </head>
-            <body>
-                <h1>Success.</h1>
-                Click <a href="/login">here</a> to go back to login page.
-            </body>
+                <head>
+                    <title>Success</title>
+                </head>
+                <body>
+                    <h1>Success.</h1>
+                    Click <a href="/login">here</a> to go back to login page.
+                </body>
+            </html>
         """
+
+def get_page(page_data):
+    return f"""<!DOCTYPE html>
+                <html>
+                <head><title>error</title><head>
+                <body><h1>{page_data}</h1></body>
+                </html>
+            """
 
 
 @application.route("/")
@@ -74,13 +85,11 @@ def index():
 
 
 @application.route("/login", methods=["GET", "POST"])
-@application.route("/existing-user", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
         if user_session_exists():
             return redirect(url_for("chat"))
         return render_template("login.html")
-
     else:
         creds = get_user_creds_from_req(request)
 
@@ -92,14 +101,21 @@ def login():
 
 
 @application.route("/signup", methods=["GET", "POST"])
-@application.route("/new-user", methods=["GET", "POST"])
 def signup():
     if request.method == "GET":
         return render_template("signup.html")
     else:
         creds = get_user_creds_from_req(request)
-        create_new_user(*creds)
-        return get_success_page()
+        message = ""
+        try:
+            create_new_user(*creds)
+        except sqlite3.IntegrityError:
+            message = "Username Already Exists."
+        except Exception:
+            message = "Something wrong!"
+        else:
+            message = "You've successfully registered."
+        return message
 
 
 @application.route("/chat")

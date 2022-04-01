@@ -10,7 +10,7 @@ application.config["SECRET_KEY"] = "4as5x8xf7g"
 socketio = SocketIO(application)
 
 
-def user_session_exists(session):
+def user_session_exists():
     return "username" in session
 
 def get_user_creds_from_req(request):
@@ -29,68 +29,66 @@ def correct_credentials(*creds) -> bool:
 
     return True if db_creds else False
 
-def get_wrong_creds_page() -> str:
+def wrong_creds_page() -> str:
     return """<!DOCTYPE html>
-    <html>
-    <head>
+        <html>
+        <head>
             <title>Failure</title>
-    </head>
-    <body>
+        </head>
+        <body>
             <h1>Wrong Credentials.</h1>
             Click <a href="/login">here</a> to login again.
-    </body>
-    </html>"""
+        </body>
+        </html>
+    """
 
+def build_session_for_user(creds):
+    session["username"] = creds[0]
 
 def create_new_user(*creds):
     database = Database()
     database.create_user(creds[0], creds[1])
     database.commit_and_close_connection()
-    del database
 
 def get_success_page():
     return """
             <!DOCTYPE html>
             <html>
             <head>
-                    <title>Success</title>
+                <title>Success</title>
             </head>
             <body>
-                    <h1>Success.</h1>
-                    Click <a href="/login">here</a> to go back to login page.
+                <h1>Success.</h1>
+                Click <a href="/login">here</a> to go back to login page.
             </body>
-            """
-
-def get_username(request):
-    return request.form.get("username")
+        """
 
 
 @application.route("/")
 @application.route("/home")
 @application.route("/index")
 def index():
-    return render_template("index.html")
+    if user_session_exists():
+        return redirect(url_for("chat"))
+    return redirect(url_for("signup"))
 
 
 @application.route("/login", methods=["GET", "POST"])
 @application.route("/existing-user", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-
-        if user_session_exists(session):
+        if user_session_exists():
             return redirect(url_for("chat"))
-        else:
-            return render_template("login.html")
+        return render_template("login.html")
 
     else:
         creds = get_user_creds_from_req(request)
 
         if not correct_credentials(*creds):
-            return get_wrong_creds_page()
+            return wrong_creds_page()
 
-        else:
-            session["username"] = get_username(request)
-            return redirect(url_for("chat"))
+        build_session_for_user(creds)
+        return redirect(url_for("chat"))
 
 
 @application.route("/signup", methods=["GET", "POST"])
@@ -106,17 +104,15 @@ def signup():
 
 @application.route("/chat")
 def chat():
-    if user_session_exists(session):
+    if user_session_exists():
         return render_template("chat.html", username=session["username"])
-    else:
-        return redirect(url_for("index"))
+    return redirect(url_for("index"))
 
 
 @application.route("/logout")
 def logout():
-    if user_session_exists(session):
+    if user_session_exists():
         session.pop("username", None)
-
     return redirect(url_for("index"))
 
 
@@ -148,7 +144,7 @@ def emit_to_everyone(message_data):
 def response_for_older_messages():
 
     database_obj = Database()
-    query = """SELECT * FROM GLOBAL"""
+    query = """SELECT * FROM CHAT"""
     # execute the query to fetch the messages
 
     database_obj.execute(query)

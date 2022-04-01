@@ -30,7 +30,7 @@ function sendPostRequestToCurrentURL(data) {
   xhr.send("username="+data["username"]+"&password="+data["password"]);
 }
 
-function validatePasswordAndSubmit() {
+function validatePasswordAndRegister() {
 
   var givenPassword = document.getElementById("password").value;
   var confPassword = document.getElementById("con_pass").value;
@@ -48,4 +48,23 @@ function validatePasswordAndSubmit() {
   emptyPasswordFields();
 }
 
+function validateUsernameAndPassword() {
+  var xhr = new XMLHttpRequest();
+  var result = document.getElementById("result");
+  var username = document.getElementById("username").value;
+  var password = document.getElementById("password").value;
+  var url = window.location.href;
 
+  xhr.onreadystatechange = function() {
+    if(this.readyState == 4 && this.status == 401) {
+      result.innerHTML = this.responseText;
+    }
+    if(this.readyState == 4 && this.status == 200) {
+      window.location.href = "/chat";
+    }
+  }
+
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+  xhr.send("username="+username+"&password="+password);
+}

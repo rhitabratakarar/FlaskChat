@@ -35,25 +35,23 @@
             <div class="center-text small-margin">
               <p class="small-text center inline-block">Don't have an Account?</p>
               <a href="/signup" class="inline-block small-text">Sign Up</a>
+              <p id="result" class="small-text">{{result}}</p>
             </div>
 
-            <form method="POST">
+            <div class="left-text big-top-margin">
+              <label for="username" class="small-text bold margin-bottom-zero noselect">Username</label><br>
+              <input type="text" id="username" name="username" class="round-gray-border small-text">
+            </div>
 
-              <div class="left-text big-top-margin">
-                <label for="username" class="small-text bold margin-bottom-zero noselect">Username</label><br>
-                <input type="text" id="username" name="username" class="round-gray-border small-text">
-              </div>
+            <div class="left-text big-top-margin">
+              <label for="password" class="small-text bold margin-bottom-zero noselect">Password</label><br>
+              <input type="password" name="password" id="password" placeholder="Must be at least 6 characters" class="round-gray-border small-text">
+            </div>
 
-              <div class="left-text big-top-margin">
-                <label for="password" class="small-text bold margin-bottom-zero noselect">Password</label><br>
-                <input type="password" name="password" id="password" placeholder="Must be at least 6 characters" class="round-gray-border small-text">
-              </div>
+            <div class="center-text big-top-margin">
+              <button id="signup-button" onclick="validateUsernameAndPassword()">Log In</button>
+            </div>
 
-              <div class="center-text big-top-margin">
-                <button id="signup-button">Log In</button>
-              </div>
-
-            </form>
           </div>
         </div>
     </div>

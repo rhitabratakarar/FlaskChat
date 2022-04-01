@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for
 from flask_socketio import SocketIO
-from flask import request, session, redirect
+from flask import request, session, redirect, Response
 from database import Database
 import json
 import sqlite3
@@ -52,20 +52,6 @@ def create_new_user(*creds):
     print("user created")
     database.commit_and_close_connection()
 
-def get_success_page():
-    return """
-            <!DOCTYPE html>
-            <html>
-                <head>
-                    <title>Success</title>
-                </head>
-                <body>
-                    <h1>Success.</h1>
-                    Click <a href="/login">here</a> to go back to login page.
-                </body>
-            </html>
-        """
-
 def get_page(page_data):
     return f"""<!DOCTYPE html>
                 <html>
@@ -94,10 +80,10 @@ def login():
         creds = get_user_creds_from_req(request)
 
         if not correct_credentials(*creds):
-            return wrong_creds_page()
+            return "Wrong Credentials", 401
 
         build_session_for_user(creds)
-        return redirect(url_for("chat"))
+        return redirect(url_for("chat")), 200
 
 
 @application.route("/signup", methods=["GET", "POST"])

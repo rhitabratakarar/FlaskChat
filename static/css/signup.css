@@ -55,7 +55,7 @@ body{
 }
 
 .big-top-margin {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .flex {
@@ -120,9 +120,9 @@ button {
     font-weight: bold;
     height: 2.9em;
     border: none;
+    transition: all 0.5s ease-in-out;
 }
 button:hover{
-    transition: all 0.5s ease-in-out;
     background-color: #132454;
 }
 input[type="text"], input[type="password"] {

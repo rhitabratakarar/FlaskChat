@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for
 from flask_socketio import SocketIO
-from flask import request, session, redirect, Response
+from flask import request, session, redirect
 from database import Database
 import json
 import sqlite3
@@ -20,7 +20,7 @@ def get_user_creds_from_req(request):
     return username, password
 
 def correct_credentials(*creds) -> bool:
-    query = f"""SELECT * FROM AUTH 
+    query = f"""SELECT * FROM AUTH
             WHERE Username='{creds[0]}' AND Password='{creds[1]}';
             """
     database = Database()
@@ -118,62 +118,50 @@ def logout():
     return redirect(url_for("index"))
 
 
+def insert_message_into_global(message_data):
+    message_data = json.loads(message_data)
+
+    database = Database()
+    database.append_message_into_global(message_data['username'], message_data["message"])
+    database.commit_and_close_connection()
+
+    del database
+
+
 @socketio.on("client_message")
 def emit_to_everyone(message_data):
-
-    # message_data = {username: <username>, message: <message>}
-    message = json.loads(message_data)
-
-    usr = message['username']
-    msg = message['message']
-
-    query = f"""INSERT INTO GLOBAL
-                            VALUES ('{usr}', '{msg}')"""
-
-    # insert it into database.
-    database_obj = Database()
-    database_obj.execute(query)
-
-    # close the connection
-    database_obj.commit_and_close_connection()
-    del database_obj
+    # message_data = "{username: <username>, message: <message>}"
+    insert_message_into_global(message_data)
 
     # send "my response" back to the client.
     socketio.emit("server_response", message_data)
 
 
+def get_all_messages():
+    database = Database()
+    database.execute("select * from global")
+    all_messages = database.cursor.fetchall()
+    database.commit_and_close_connection()
+    return all_messages
+
+
+def get_converted_json_messages(messages) -> str:
+    json_messages = []
+    for tupl in messages:
+        json_messages.append({"username": tupl[0], "message": tupl[1]})
+    return json.dumps(json_messages)
+
+
 @socketio.on("request_for_older_messages")
 def response_for_older_messages():
+    all_messages = get_all_messages()  # ((username, message), (username, message), ...)
 
-    database_obj = Database()
-    query = """SELECT * FROM CHAT"""
-    # execute the query to fetch the messages
+    json_messages = get_converted_json_messages(all_messages)
 
-    database_obj.execute(query)
-    all_messages = database_obj.cursor.fetchall()
-    # all_messages = (('username', 'message'), ('username', 'message'))
-
-    database_obj.commit_and_close_connection()
-    del database_obj
-
-    json_messages = []
-    # json_messages = [{username: message}, {username, message}, ...]
-
-    # convert the tuple into dictionary
-    for tup in all_messages:
-            username = tup[0]
-            message = tup[1]
-
-            # encapsulate it inside dictionary.
-            json_messages.append({"username": username, "message": message})
-
-    # convert it into json string.
-    json_messages = json.dumps(json_messages)
-
-    # send the messages with a custom event
+    # send the messages with a custom event to the client.
     socketio.emit("response_for_older_messages", json_messages)
 
 
 if __name__ == "__main__":
     # socket created at default port = 5000
-    socketio.run(application, debug=True)
+    socketio.run(application, debug=True, threaded=True)

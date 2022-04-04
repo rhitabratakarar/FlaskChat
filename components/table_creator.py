@@ -32,4 +32,3 @@ class TableCreator:
         self.__create_auth_table_if_nonexisting()
         self.__create_global_table_if_nonexisting()
         self.__create_messages_table_if_nonexisting()
-

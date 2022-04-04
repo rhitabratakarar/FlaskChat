@@ -1,7 +1,6 @@
 $(document).ready(function () {
 
-    // const socket = io.connect("http://" + document.domain + ":" + location.port);
-    const socket = io.connect(window.location.href + ":" + location.port);
+    const socket = io.connect("http://" + document.domain + ":" + location.port);
 
     socket.emit("request_for_older_messages");
 
@@ -13,7 +12,8 @@ $(document).ready(function () {
             message: <message>}, 
             {usern: asdfasdf, message: abcdhsd}, .....  ] */
 
-        appendMessagesToChat(parsed_jsons);
+        if (parsed_jsons.length > 0)
+            appendMessagesToChat(parsed_jsons);
 
         socket.off("response_for_older_messages");
 
@@ -33,7 +33,7 @@ $(document).ready(function () {
         document.getElementById("message-box").value = "";
 
         var data = {
-            username: "{{username}}",
+            username: getUsername(),
             message: message
         }
         socket.emit("client_message", JSON.stringify(data));
@@ -44,7 +44,6 @@ $(document).ready(function () {
 
         var json_message = JSON.parse(json_message);
 
-        appendDivisionToChat(json_message["username"], json_message["message"]);
+        appendDivisionToChat(`<div class="mine messages"><div class="message">${json_message['message']}</div></div>`);
     });
-
 });

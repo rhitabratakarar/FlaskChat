@@ -70,3 +70,8 @@ function appendMessagesToChat(parsed_jsons) {
         prev_username = curr_username;
     }
 }
+
+$("#search-icon").on('click', function() {
+    $(".search").toggle();
+    $(".search>input[type='text']").toggle();
+});

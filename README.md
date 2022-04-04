@@ -15,6 +15,8 @@ A simple Chat Application made using Python's Flask Framework.
 
 5. Sqlite3
 
+6. python-dotenv
+
 
 # How to setup...
 
@@ -28,7 +30,11 @@ A simple Chat Application made using Python's Flask Framework.
 
         python3 -m pip install -r requirements.txt
 
-4. To start the server, use the command
+4. Create a `.env` file inside cloned directory and create a secret key like shown below...
+
+        SECRET_KEY=<your secret key goes here>
+
+5. To start the server, use the command
 
         python3 server.py
 

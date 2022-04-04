@@ -2,7 +2,6 @@ window.onload = function() {
   document.getElementById("container").style.display = "flex";
 }
 
-
 function emptyPasswordFields() {
   document.getElementById("password").value = "";
   document.getElementById("con_pass").value = "";

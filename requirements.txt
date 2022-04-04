@@ -1,3 +1,4 @@
 flask
 simple-websocket
 flask-socketio
+python-dotenv

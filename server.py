@@ -2,12 +2,16 @@ from flask import Flask, render_template, url_for
 from flask_socketio import SocketIO
 from flask import request, session, redirect
 from database import Database
+from dotenv import load_dotenv
 import json
+import os
 import sqlite3
 
 
+load_dotenv()
+SECRET_KEY = "SECRET_KEY"
 application = Flask(__name__)
-application.config["SECRET_KEY"] = "4as5x8xf7g"
+application.config[SECRET_KEY] = os.getenv(SECRET_KEY)
 socketio = SocketIO(application)
 
 
@@ -66,15 +70,17 @@ def get_page(page_data):
 @application.route("/index")
 def index():
     if user_session_exists():
-        return redirect(url_for("chat"))
-    return redirect(url_for("signup"))
+        username = request.cookies.get('username')
+        return redirect(url_for("chat", username=username))
+    return redirect(url_for("login"))
 
 
 @application.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
         if user_session_exists():
-            return redirect(url_for("chat"))
+            username = request.cookies.get('username')
+            return redirect(url_for("chat", username=username))
         return render_template("login.html")
     else:
         creds = get_user_creds_from_req(request)
@@ -164,4 +170,4 @@ def response_for_older_messages():
 
 if __name__ == "__main__":
     # socket created at default port = 5000
-    socketio.run(application, debug=True, threaded=True)
+    socketio.run(application, debug=True)

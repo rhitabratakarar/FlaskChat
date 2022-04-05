@@ -12,8 +12,7 @@ $(document).ready(function () {
             message: <message>}, 
             {usern: asdfasdf, message: abcdhsd}, .....  ] */
 
-        if (parsed_jsons.length > 0)
-            appendMessagesToChat(parsed_jsons);
+        appendMessagesToChat(parsed_jsons);
 
         socket.off("response_for_older_messages");
 
@@ -44,6 +43,6 @@ $(document).ready(function () {
 
         var json_message = JSON.parse(json_message);
 
-        appendDivisionToChat(`<div class="mine messages"><div class="message">${json_message['message']}</div></div>`);
+        appendDivisionToChat(`<div class="send">${json_message['message']}</div>`);
     });
 });

@@ -8,18 +8,18 @@ function appendDivisionToChat(division) {
     chat_section.scrollTop = chat_section.scrollHeight;
 }
 
-let message = function(message) {
+let message = function (message) {
     return `<div class='message'>${message}</div>`
 }
 
-let first_message = function(username, message) {
+let first_message = function (username, message) {
     return `<div class='message'><p>${username}</p>${message}</div>`
 }
 
-let mine_messages = function(arr) {
+let mine_messages = function (arr) {
     let mine_message = `<div class='mine messages'>`;
 
-    arr.forEach(function(div) {
+    arr.forEach(function (div) {
         mine_message = mine_message + div;
     });
 
@@ -27,10 +27,10 @@ let mine_messages = function(arr) {
     return mine_message;
 }
 
-let your_messages = function(arr) {
+let your_messages = function (arr) {
     let your_message = `<div class='yours messages'>`;
-    
-    arr.forEach(function(div) {
+
+    arr.forEach(function (div) {
         your_message = your_message + "</div>";
     });
 
@@ -45,24 +45,24 @@ function appendMessagesToChat(parsed_jsons) {
     let count = 0;
 
 
-    for(let i = 1; i < parsed_jsons.length; i++) {
+    for (let i = 1; i < parsed_jsons.length; i++) {
         let curr_username = parsed_jsons[i]['username'];
-        
-        if(prev_username == curr_username) {
+
+        if (prev_username == curr_username) {
             count = count + 1;
-            if(count == 1)
-                arr.push(first_message(parsed_jsons[i-1]['username'], parsed_jsons[i-1]['message']));
-            else 
-                arr.push(message(parsed_jsons[i-1]['message']))
+            if (count == 1)
+                arr.push(first_message(parsed_jsons[i - 1]['username'], parsed_jsons[i - 1]['message']));
+            else
+                arr.push(message(parsed_jsons[i - 1]['message']))
         }
         else {
             count = 0;
-            arr.push(message[parsed_jsons[i-1]['message']]);
+            arr.push(message[parsed_jsons[i - 1]['message']]);
             let message_divs = "";
 
-            if(prev_username == me) 
+            if (prev_username == me)
                 message_divs = mine_messages(arr);
-            else 
+            else
                 message_divs = your_messages(arr);
 
             appendDivisionToChat(message_divs);
@@ -71,7 +71,21 @@ function appendMessagesToChat(parsed_jsons) {
     }
 }
 
-$("#search-icon").on('click', function() {
+$("#search-icon").on('click', function () {
     $(".search").toggle();
     $(".search>input[type='text']").toggle();
 });
+
+$("#top-bar-left>.profile-icon").on('click', function () {
+    $(".left>.users").toggle();
+    $("#search-icon").toggle();
+
+    if ($(".search").is(":visible")) {
+        $(".search").toggle();
+        $(".search>*").toggle();
+    };
+
+    $(".username").css({
+        transition: 'all 1s ease-in'
+    });
+})

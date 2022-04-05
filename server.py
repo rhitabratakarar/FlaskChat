@@ -15,10 +15,10 @@ application.config[SECRET_KEY] = os.getenv(SECRET_KEY)
 socketio = SocketIO(application)
 
 
-def user_session_exists():
+def user_session_exists() -> bool:
     return "username" in session
 
-def get_user_creds_from_req(request):
+def get_user_creds_from_req(request) -> tuple:
     username = request.form.get("username")
     password = request.form.get("password")
     return username, password
@@ -47,16 +47,18 @@ def wrong_creds_page() -> str:
         </html>
     """
 
-def build_session_for_user(creds):
+def build_session_for_user(creds) -> None:
     session["username"] = creds[0]
 
-def create_new_user(*creds):
+
+def create_new_user(*creds) -> None:
     database = Database()
     database.create_user(creds[0], creds[1])
     print("user created")
     database.commit_and_close_connection()
 
-def get_page(page_data):
+
+def get_page(page_data) -> str:
     return f"""<!DOCTYPE html>
                 <html>
                 <head><title>error</title><head>

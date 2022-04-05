@@ -5,7 +5,7 @@
 }
 
 :root {
-    --send-bg: #0B93F6;
+    --send-bg: #007aff;
     --send-color: white;
     --receive-bg: #E5E5EA;
     --receive-text: black;
@@ -53,7 +53,7 @@
 }
 
 .left {
-    width: 30vw;
+    width: 25vw;
     height: auto;
     background-color: #ede8ed;
     min-width: 300px;
@@ -65,7 +65,7 @@
 } */
 
 .right {
-    width: 70vw;
+    width: 75vw;
     height: auto;
 }
 
@@ -188,8 +188,9 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
-    word-wrap: break-word;
-    word-break: break-all;
+    /* word-wrap: break-word; */
+    word-wrap: normal;
+    /* word-break: break-all; */
     padding: 0 50px 0 50px;
 }
 
@@ -257,11 +258,12 @@
 #send {
     width: 24px;
     /* height: 20px; */
-    margin-right: 10px;
+    /* margin-right: 5px; */
     /* margin-left: -2em; */
     /* right: 30px; */
     align-self: center;
     margin-top: 0.25em;
+    margin-right: 
 }
 
 #dummy-text-field {
@@ -380,5 +382,17 @@
 }
 
 .username{
-    margin-left:10px;
+    flex-grow: 1;
+}
+
+#left-icon{
+    transition: all 0.5s;
+}
+
+#left-icon:hover{
+    transform: scale(1.1);
+}
+
+.users{
+    display: none;
 }

@@ -40,9 +40,8 @@ $(document).ready(function () {
 
 
     socket.on("server_response", function (json_message) {
-
         var json_message = JSON.parse(json_message);
 
-        appendDivisionToChat(`<div class="send">${json_message['message']}</div>`);
+        appendDivisionToChat(`<p class="send">${json_message['message']}</p>`);
     });
 });

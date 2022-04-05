@@ -2,90 +2,68 @@ var messages_loaded = false;
 
 function appendDivisionToChat(division) {
 
-    $("#chat-section-div").append(`${division}`);
+  $("#chat-section-div").append(`${division}`);
 
-    const chat_section = document.getElementById("chat-section-div");
-    chat_section.scrollTop = chat_section.scrollHeight;
+  const chat_section = document.getElementById("chat-section-div");
+  chat_section.scrollTop = chat_section.scrollHeight;
 }
 
-let message = function (message) {
-    return `<div class='message'>${message}</div>`
+function getSendingMessageParagraph(message) {
+  return `<p class='send'>${message}</p>`;
 }
 
-let first_message = function (username, message) {
-    return `<div class='message'><p>${username}</p>${message}</div>`
+function getReceivingMessageParagraph(message) {
+  return `<p class='receive'>${message}</p>`;
 }
 
-let mine_messages = function (arr) {
-    let mine_message = `<div class='mine messages'>`;
-
-    arr.forEach(function (div) {
-        mine_message = mine_message + div;
-    });
-
-    mine_message = mine_message + "</div>";
-    return mine_message;
-}
-
-let your_messages = function (arr) {
-    let your_message = `<div class='yours messages'>`;
-
-    arr.forEach(function (div) {
-        your_message = your_message + "</div>";
-    });
-
-    your_message = your_message + "</div>";
-    return your_message;
+function getFirstReceivingMessageParagraph(username, message) {
+  return `<p class='receive'>${username}</br>${message}</p>`;
 }
 
 function appendMessagesToChat(parsed_jsons) {
-    let me = "{{username}}";
-    let prev_username = parsed_jsons[0]['username'];
-    let arr = [];
-    let count = 0;
+  let me = getUsername();
+  let paragraph = null;
+  let i = 0;
 
+  while(i < parsed_jsons.length) {
+    let currentUsername = parsed_jsons[i]['username'];
 
-    for (let i = 1; i < parsed_jsons.length; i++) {
-        let curr_username = parsed_jsons[i]['username'];
-
-        if (prev_username == curr_username) {
-            count = count + 1;
-            if (count == 1)
-                arr.push(first_message(parsed_jsons[i - 1]['username'], parsed_jsons[i - 1]['message']));
-            else
-                arr.push(message(parsed_jsons[i - 1]['message']))
-        }
-        else {
-            count = 0;
-            arr.push(message[parsed_jsons[i - 1]['message']]);
-            let message_divs = "";
-
-            if (prev_username == me)
-                message_divs = mine_messages(arr);
-            else
-                message_divs = your_messages(arr);
-
-            appendDivisionToChat(message_divs);
-        }
-        prev_username = curr_username;
+    if (me == currentUsername) {
+      paragraph = getSendingMessageParagraph(parsed_jsons[i]['message']);
+      appendDivisionToChat(paragraph);
     }
+    else {
+      let start = i;
+      console.log('here');
+      while (parsed_jsons[i]['username'] == currentUsername && i < parsed_jsons.length) {
+        if (i == start)
+          paragraph = getFirstReceivingMessageParagraph(parsed_jsons[i]['username'], parsed_jsons[i]['message']);
+        else
+          paragraph = getReceivingMessageParagraph(parsed_jsons[i]['message']);
+          appendDivisionToChat(paragraph);
+        i++;
+      }
+      continue;
+    }
+    i++;
+  }
 }
 
 $("#search-icon").on('click', function () {
-    $(".search").toggle();
-    $(".search>input[type='text']").toggle();
+  $(".search").toggle();
+  $(".search>input[type='text']").toggle();
 });
 
 $("#top-bar-left>.profile-icon").on('click', function () {
-    $(".left>.users").toggle();
-    $("#search-icon").toggle();
+  $(".left>.users").toggle();
+  $("#search-icon").toggle();
 
-    if ($(".search").is(":visible")) {
-        $(".search").toggle();
-        $(".search>*").toggle();
-    };
+  if ($(".search").is(":visible")) {
+    $(".search").toggle();
+    $(".search>*").toggle();
+  };
 
-    $(".username").css({
-        transition: 'all 1s ease-in'
-    });
+  $(".username").css({
+    transition: 'all 1s ease-in'
+  });
 })

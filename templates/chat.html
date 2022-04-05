@@ -213,9 +213,9 @@
           Global
         </div>
         
-        <div class="profile flex col flex-start">
+        <div class="profile flex col space-between growable">
           <div class="flex col center-flex-item">
-          <svg class="medium-icon profile-icon" xmlns="http://www.w3.org/2000/svg" width="128.356" height="128.356"
+          <svg class="profile-icon large-medium-icon profile-settings-icon" xmlns="http://www.w3.org/2000/svg" width="128.356" height="128.356"
           viewBox="0 0 128.356 128.356">
           <path id="Icon_ionic-md-person" data-name="Icon ionic-md-person"
             d="M68.678,68.678A32.089,32.089,0,1,0,36.589,36.589,32.183,32.183,0,0,0,68.678,68.678Zm0,16.045C47.42,84.723,4.5,95.554,4.5,116.812v16.045H132.856V116.812C132.856,95.554,89.937,84.723,68.678,84.723Z"
@@ -223,9 +223,11 @@
           </svg>
           <p>{{username}}</p>
           </div>
+          <div class="flex row space-between" id="settings-footer">
 
-          <p>Settings</p>
-          <p>Log out</p>
+            <button>Settings</button>
+            <button onclick="window.location.href='/logout'">Logout</button>
+          </div>
         </div>
 
       </div>
@@ -276,7 +278,7 @@
           viewBox="0 0 107.725 92.336">
           <path id="Icon_material-send" data-name="Icon material-send"
             d="M3.051,96.836,110.725,50.668,3.051,4.5,3,40.408l76.946,10.26L3,60.927Z" transform="translate(-3 -4.5)"
-            fill="#737577" />
+            fill="#737577"/>
         </svg>
 
       </div>

@@ -17,7 +17,7 @@ function getReceivingMessageParagraph(message) {
 }
 
 function getFirstReceivingMessageParagraph(username, message) {
-  return `<p class='receive'>${username}</br>${message}</p>`;
+  return `<p class='receive'><strong>${username}</strong></br>${message}</p>`;
 }
 
 function appendMessagesToChat(parsed_jsons) {
@@ -34,8 +34,7 @@ function appendMessagesToChat(parsed_jsons) {
     }
     else {
       let start = i;
-      console.log('here');
-      while (parsed_jsons[i]['username'] == currentUsername && i < parsed_jsons.length) {
+      while (i < parsed_jsons.length && parsed_jsons[i]['username'] == currentUsername) {
         if (i == start)
           paragraph = getFirstReceivingMessageParagraph(parsed_jsons[i]['username'], parsed_jsons[i]['message']);
         else

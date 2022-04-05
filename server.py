@@ -135,14 +135,27 @@ def insert_message_into_global(message_data):
 
     del database
 
+def get_last_2nd_message_from_global() -> set:
+    database = Database()
+    database.execute('select * from global order by rowid desc limit 1,1')
+    last_2nd_row = database.cursor.fetchone()
+    database.commit_and_close_connection()
+    return last_2nd_row
+
 
 @socketio.on("client_message")
-def emit_to_everyone(message_data):
+def emit_to_everyone(message_data):    
+    last_2nd_row = get_last_2nd_message_from_global()
+
+    if not last_2nd_row:
+        json_to_send = [{"username": "", "message": ""}, json.loads(message_data)]
+    else:
+        json_to_send = [{"username": last_2nd_row[0], "message": last_2nd_row[1]}, json.loads(message_data)]
+
     # message_data = "{username: <username>, message: <message>}"
     insert_message_into_global(message_data)
 
-    # send "my response" back to the client.
-    socketio.emit("server_response", message_data)
+    socketio.emit("server_response", json.dumps(json_to_send))
 
 
 def get_all_messages():

@@ -131,18 +131,20 @@
 }
 
 .profile-icon {
-    background-color: red;
+    background-color: rgb(0, 81, 255);
     border-radius: 50%;
     margin-left: 10px;
     margin-top: 5px;
     align-self: center;
     margin-right: 5px;
+    padding-top: 3px;
 }
 .user-icon {
     background-color: red;
     border-radius: 50%;
     align-self: center;
     margin: 10px;
+    padding-top: 3px;
 }
 
 .space-between {
@@ -187,11 +189,11 @@
     width: auto;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+
     /* word-wrap: break-word; */
     word-wrap: normal;
     /* word-break: break-all; */
-    padding: 0 50px 0 50px;
+    padding: 25px 50px 0 50px;
 }
 
 .messages {
@@ -263,7 +265,8 @@
     /* right: 30px; */
     align-self: center;
     margin-top: 0.25em;
-    margin-right: 
+    margin-left:25px;
+    margin-right:25px;
 }
 
 #dummy-text-field {
@@ -325,11 +328,12 @@
 
 .chat>p {
     max-width: 255px;
-    word-wrap: break-word;
+    /* word-wrap: break-word; */
+    overflow-wrap: break-word;
     margin-bottom: 12px;
     line-height: 24px;
     position: relative;
-    padding: 10px 20px;
+    padding: 8px 12px;
     border-radius: 25px;
 }
 
@@ -365,6 +369,7 @@
     background: var(--receive-bg);
     color: black;
     align-self: flex-start;
+    padding: 2em;
 }
 
 .receive:before {
@@ -393,6 +398,26 @@
     transform: scale(1.1);
 }
 
-.users{
+.large-medium-icon{
+    height: 5em;
+    width: 5em;
+}
+
+.profile-settings-icon{
+    margin: 1em;
+}
+
+/* .users{
     display: none;
+} */
+
+#settings-footer>button{
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    position: static;
+}
+
+.header > svg{
+    background-color: red;
 }

@@ -38,10 +38,26 @@ $(document).ready(function () {
         socket.emit("client_message", JSON.stringify(data));
     });
 
-
     socket.on("server_response", function (json_message) {
+
         var json_message = JSON.parse(json_message);
 
-        appendDivisionToChat(`<p class="send">${json_message['message']}</p>`);
+        let my_username = getUsername();
+
+        if(my_username == json_message[1]['username']) {
+            appendDivisionToChat(`<p class="send">${json_message[1]['message']}</p>`);
+        }
+        else {
+            if(json_message[0]['username'] != json_message[1]['username']) {
+                let username = json_message[1]['username'];
+                let message = json_message[1]['message'];
+
+                appendDivisionToChat(getFirstReceivingMessageParagraph(username, message));
+            }
+            else {
+                console.log("here!");
+                appendDivisionToChat(getReceivingMessageParagraph(json_message[1]['message']));
+            }
+        }
     });
 });

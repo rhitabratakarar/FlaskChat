@@ -190,4 +190,4 @@ def response_for_older_messages():
 
 if __name__ == "__main__":
     # socket created at default port = 5000
-    socketio.run(application)
+    socketio.run(application, debug=True)

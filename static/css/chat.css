@@ -371,6 +371,15 @@
     
 }
 
+.receive>strong{
+    /* color: rgb(255, 255, 255) */
+    font-family: Poppins;
+    font-weight: 300;
+    font-size: 80%;
+    color: #cb0032;
+
+}
+
 .receive:before {
     left: -7px;
     /* width: 20px; */

@@ -25,7 +25,7 @@ function appendMessagesToChat(parsed_jsons) {
   let paragraph = null;
   let i = 0;
 
-  while(i < parsed_jsons.length) {
+  while (i < parsed_jsons.length) {
     let currentUsername = parsed_jsons[i]['username'];
 
     if (me == currentUsername) {
@@ -39,7 +39,7 @@ function appendMessagesToChat(parsed_jsons) {
           paragraph = getFirstReceivingMessageParagraph(parsed_jsons[i]['username'], parsed_jsons[i]['message']);
         else
           paragraph = getReceivingMessageParagraph(parsed_jsons[i]['message']);
-          appendDivisionToChat(paragraph);
+        appendDivisionToChat(paragraph);
         i++;
       }
       continue;

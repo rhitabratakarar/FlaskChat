@@ -6,11 +6,11 @@
   <title>FlaskChat</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <link rel="stylesheet" href="../static/css/chat.css">
-  <!-- <link rel="stylesheet" href="{{url_for('static', filename='css/chat.css')}}"> -->
+  <!-- <link rel="stylesheet" href="../static/css/chat.css"> -->
+  <link rel="stylesheet" href="{{url_for('static', filename='css/chat.css')}}">
 
-  <link rel="icon" href="../static/icons/Favicon.png">
-  <!-- <link rel="icon" href="{{url_for('static', filename='icons/Favicon.png')}}"> -->
+  <!-- <link rel="icon" href="../static/icons/Favicon.png"> -->
+  <link rel="icon" href="{{url_for('static', filename='icons/Favicon.png')}}">
 
   <script type="text/javascript">
     function getUsername() {
@@ -38,8 +38,8 @@
 
       <div class="flex row space-between" id="top-bar-left">
 
-        <svg class="medium-icon pointable profile-icon" id="left-icon" xmlns="http://www.w3.org/2000/svg" width="128.356"
-          height="128.356" viewBox="0 0 128.356 128.356">
+        <svg class="medium-icon pointable profile-icon" id="left-icon" xmlns="http://www.w3.org/2000/svg"
+          width="128.356" height="128.356" viewBox="0 0 128.356 128.356">
           <path id="Icon_ionic-md-person" data-name="Icon ionic-md-person"
             d="M68.678,68.678A32.089,32.089,0,1,0,36.589,36.589,32.183,32.183,0,0,0,68.678,68.678Zm0,16.045C47.42,84.723,4.5,95.554,4.5,116.812v16.045H132.856V116.812C132.856,95.554,89.937,84.723,68.678,84.723Z"
             transform="translate(-4.5 -4.5)" fill="#fff" />
@@ -61,11 +61,11 @@
 
       <div class="profile flex col center-flex-item growable space-between" id="profile-div">
         <div class="flex col center-flex-item growable space-between">
-          <svg class="profile-icon large-medium-icon profile-settings-icon" xmlns="http://www.w3.org/2000/svg" width="128.356" height="128.356"
-          viewBox="0 0 128.356 128.356">
-          <path id="Icon_ionic-md-person" data-name="Icon ionic-md-person"
-          d="M68.678,68.678A32.089,32.089,0,1,0,36.589,36.589,32.183,32.183,0,0,0,68.678,68.678Zm0,16.045C47.42,84.723,4.5,95.554,4.5,116.812v16.045H132.856V116.812C132.856,95.554,89.937,84.723,68.678,84.723Z"
-          transform="translate(-4.5 -4.5)" fill="#fff" />
+          <svg class="profile-icon large-medium-icon profile-settings-icon" xmlns="http://www.w3.org/2000/svg"
+            width="128.356" height="128.356" viewBox="0 0 128.356 128.356">
+            <path id="Icon_ionic-md-person" data-name="Icon ionic-md-person"
+              d="M68.678,68.678A32.089,32.089,0,1,0,36.589,36.589,32.183,32.183,0,0,0,68.678,68.678Zm0,16.045C47.42,84.723,4.5,95.554,4.5,116.812v16.045H132.856V116.812C132.856,95.554,89.937,84.723,68.678,84.723Z"
+              transform="translate(-4.5 -4.5)" fill="#fff" />
           </svg>
           <p>{{username}}</p>
         </div>
@@ -250,9 +250,14 @@
         <p class="send">Hey there! What's up</p>
         <p class="receive">Checking out iOS7 you know..</p>
         <p class="send">Gareeb Saala!</p>
-        <p class="receive">Wow that's impressive. But what's even more impressive is that this bubble is really high.</p>
-        <p class="send">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa </p>
-        <p class="receive">Dear Students, This is to inform all the absentee students of CT1 that a special offline class test will be held on 31.03.2022 (Thursday). The schedule of the test is as follows. Absenteeism of this special test will be treated as absent in CT1. Kindly treat this urgent and mandatory. </p>
+        <p class="receive">Wow that's impressive. But what's even more impressive is that this bubble is really high.
+        </p>
+        <p class="send">
+          aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        </p>
+        <p class="receive">Dear Students, This is to inform all the absentee students of CT1 that a special offline
+          class test will be held on 31.03.2022 (Thursday). The schedule of the test is as follows. Absenteeism of this
+          special test will be treated as absent in CT1. Kindly treat this urgent and mandatory. </p>
         <p class="send"> el3mentry is the only gandu! </p>
 
       </div>
@@ -277,7 +282,7 @@
           viewBox="0 0 107.725 92.336">
           <path id="Icon_material-send" data-name="Icon material-send"
             d="M3.051,96.836,110.725,50.668,3.051,4.5,3,40.408l76.946,10.26L3,60.927Z" transform="translate(-3 -4.5)"
-            fill="#737577"/>
+            fill="#737577" />
         </svg>
 
       </div>
@@ -286,14 +291,14 @@
 
   </div>
 
-  <script type="text/javascript" src="../static/js/miscellaneous.js"></script>
-  <!-- <script type="text/javascript" src="{{url_for('static', filename='js/miscellaneous.js')}}"></script> -->
+  <!-- <script type="text/javascript" src="../static/js/miscellaneous.js"></script> -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/miscellaneous.js')}}"></script>
 
-  <script type="text/javascript" src="../static/js/emoji.js"></script>
-  <!-- <script type="text/javascript" src="{{url_for('static', filename='js/emoji.js')}}"></script> -->
+  <!-- <script type="text/javascript" src="../static/js/emoji.js"></script> -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/emoji.js')}}"></script>
 
-  <script type="text/javascript" src="../static/js/chat.js"></script>
-  <!-- <script type="text/javascript" src="{{url_for('static', filename='js/chat.js')}}"></script> -->
+  <!-- <script type="text/javascript" src="../static/js/chat.js"></script> -->
+  <script type="text/javascript" src="{{url_for('static', filename='js/chat.js')}}"></script>
 
 </body>
 

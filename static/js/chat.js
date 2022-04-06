@@ -44,11 +44,11 @@ $(document).ready(function () {
 
         let my_username = getUsername();
 
-        if(my_username == json_message[1]['username']) {
+        if (my_username == json_message[1]['username']) {
             appendDivisionToChat(`<p class="send">${json_message[1]['message']}</p>`);
         }
         else {
-            if(json_message[0]['username'] != json_message[1]['username']) {
+            if (json_message[0]['username'] != json_message[1]['username']) {
                 let username = json_message[1]['username'];
                 let message = json_message[1]['message'];
 

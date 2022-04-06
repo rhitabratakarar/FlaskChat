@@ -56,6 +56,8 @@ $("#search-icon").on('click', function () {
 $("#top-bar-left>.profile-icon").on('click', function () {
   $(".left>.users").toggle();
   $("#search-icon").toggle();
+  $("#profile-div").toggle();
+  $("#profile-div>*").toggle();
 
   if ($(".search").is(":visible")) {
     $(".search").toggle();
@@ -65,4 +67,4 @@ $("#top-bar-left>.profile-icon").on('click', function () {
   $(".username").css({
     transition: 'all 1s ease-in'
   });
-})
+});

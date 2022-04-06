@@ -193,7 +193,7 @@
     /* word-wrap: break-word; */
     word-wrap: normal;
     /* word-break: break-all; */
-    padding: 25px 50px 0 50px;
+    padding: 25px 75px 0 75px;
 }
 
 .messages {
@@ -205,8 +205,6 @@
 .scrollable {
     overflow-y: auto;
 }
-
-
 
 .footer {
     background-color: #fff;
@@ -264,7 +262,7 @@
     /* margin-left: -2em; */
     /* right: 30px; */
     align-self: center;
-    margin-top: 0.25em;
+    padding-top:2px;
     margin-left:25px;
     margin-right:25px;
 }
@@ -327,11 +325,11 @@
 }
 
 .chat>p {
-    max-width: 255px;
+    max-width: 62.5%;
     /* word-wrap: break-word; */
     overflow-wrap: break-word;
     margin-bottom: 12px;
-    line-height: 24px;
+    line-height: 20px;
     position: relative;
     padding: 8px 12px;
     border-radius: 25px;
@@ -349,6 +347,7 @@
     color: var(--send-color);
     background: var(--send-bg);
     align-self: flex-end;
+    /* margin-top: -10px; */
 }
 
 .send:before {
@@ -369,7 +368,7 @@
     background: var(--receive-bg);
     color: black;
     align-self: flex-start;
-    padding: 2em;
+    
 }
 
 .receive:before {
@@ -411,11 +410,18 @@
     display: none;
 } */
 
-#settings-footer>button{
+ .profile,.profile>* {
+    display: none;
+}
+
+
+#settings-footer > a{
     border: none;
     cursor: pointer;
     margin: 5px;
     position: static;
+    text-decoration: none;
+    color: black;
 }
 
 .header > svg{

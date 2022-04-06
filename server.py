@@ -18,10 +18,12 @@ socketio = SocketIO(application)
 def user_session_exists() -> bool:
     return "username" in session
 
+
 def get_user_creds_from_req(request) -> tuple:
     username = request.form.get("username")
     password = request.form.get("password")
     return username, password
+
 
 def correct_credentials(*creds) -> bool:
     query = f"""SELECT * FROM AUTH
@@ -33,6 +35,7 @@ def correct_credentials(*creds) -> bool:
     database.commit_and_close_connection()
 
     return True if db_creds else False
+
 
 def wrong_creds_page() -> str:
     return """<!DOCTYPE html>
@@ -46,6 +49,7 @@ def wrong_creds_page() -> str:
             </body>
         </html>
     """
+
 
 def build_session_for_user(creds) -> None:
     session["username"] = creds[0]
@@ -135,6 +139,7 @@ def insert_message_into_global(message_data):
 
     del database
 
+
 def get_last_2nd_message_from_global() -> set:
     database = Database()
     database.execute('select * from global order by rowid desc limit 1,1')
@@ -144,7 +149,7 @@ def get_last_2nd_message_from_global() -> set:
 
 
 @socketio.on("client_message")
-def emit_to_everyone(message_data):    
+def emit_to_everyone(message_data):
     last_2nd_row = get_last_2nd_message_from_global()
 
     if not last_2nd_row:
@@ -185,4 +190,4 @@ def response_for_older_messages():
 
 if __name__ == "__main__":
     # socket created at default port = 5000
-    socketio.run(application, debug=True)
+    socketio.run(application)

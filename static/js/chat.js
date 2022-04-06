@@ -18,24 +18,30 @@ $(document).ready(function () {
 
     });
 
-    $('#logout').click(function () {
-        var confirmation = confirm("You want to logout?");
-
-        if (confirmation)
-            window.location.href = "/logout";
-    });
-
-    $("#send").click(function () {
-
+    function sendMessage() {
         var message = document.getElementById("message-box").value;
 
-        document.getElementById("message-box").value = "";
-
-        var data = {
-            username: getUsername(),
-            message: message
+        if (message.trim() == "") {
+            alert("THIS IS A CHAT APPLICATION... WRITE SOME MESSAGE, PLEASE!");
         }
-        socket.emit("client_message", JSON.stringify(data));
+        else {
+            document.getElementById("message-box").value = "";
+
+            var data = {
+                username: getUsername(),
+                message: message
+            }
+            socket.emit("client_message", JSON.stringify(data));
+        }
+    }
+
+    $("#send").click(function () {
+        sendMessage();
+    });
+
+    $("#message-box").on("keypress", function (e) {
+        if (e.keyCode == 13)
+            sendMessage();
     });
 
     socket.on("server_response", function (json_message) {

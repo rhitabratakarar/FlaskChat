@@ -92,7 +92,7 @@ def login():
         creds = get_user_creds_from_req(request)
 
         if not correct_credentials(*creds):
-            return "Wrong Credentials", 401
+            return "Invalid Credentials", 401
 
         build_session_for_user(creds)
         return redirect(url_for("chat")), 200
@@ -190,4 +190,5 @@ def response_for_older_messages():
 
 if __name__ == "__main__":
     # socket created at default port = 5000
+    socketio.server.eio.async_mode = "threading"
     socketio.run(application, debug=True)

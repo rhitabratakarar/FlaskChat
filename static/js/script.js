@@ -1,4 +1,4 @@
-window.onload = function() {
+window.onload = function () {
   document.getElementById("container").style.display = "flex";
 }
 
@@ -11,11 +11,11 @@ function sendPostRequestToCurrentURL(data) {
   var xhr = new XMLHttpRequest();
   var result = document.getElementById("result");
 
-  xhr.onreadystatechange = function() {
-    if(this.readyState == 4 && this.status == 200) {
+  xhr.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
       result.innerHTML = this.responseText;
     }
-    else if(this.status == 500){
+    else if (this.status == 500) {
       result.innerHTML = "Username Exists.";
     }
     else {
@@ -26,7 +26,7 @@ function sendPostRequestToCurrentURL(data) {
   var url = window.location.href;
   xhr.open("POST", url, true);
   xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-  xhr.send("username="+data["username"]+"&password="+data["password"]);
+  xhr.send("username=" + data["username"] + "&password=" + data["password"]);
 }
 
 function validatePasswordAndRegister() {
@@ -35,12 +35,20 @@ function validatePasswordAndRegister() {
   var confPassword = document.getElementById("con_pass").value;
   var username = document.getElementById("username").value;
 
-  if(givenPassword !== confPassword) {
+  if (givenPassword.length < 6) {
+    alert("Password must be of at least 6 characters.");
+  }
+
+  else if (givenPassword.trim() == "" || confPassword.trim() == "" || username.trim() == "") {
+    alert("Please fillup all the fields...");
+  }
+
+  else if (givenPassword !== confPassword) {
     alert("Passwords did not match, please re-enter.");
   }
 
   else {
-    data = {username: username, password: givenPassword};
+    data = { username: username, password: givenPassword };
     sendPostRequestToCurrentURL(data);
   }
 
@@ -54,16 +62,16 @@ function validateUsernameAndPassword() {
   var password = document.getElementById("password").value;
   var url = window.location.href;
 
-  xhr.onreadystatechange = function() {
-    if(this.readyState == 4 && this.status == 401) {
+  xhr.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 401) {
       result.innerHTML = this.responseText;
     }
-    if(this.readyState == 4 && this.status == 200) {
+    if (this.readyState == 4 && this.status == 200) {
       window.location.href = "/chat";
     }
   }
 
   xhr.open("POST", url, true);
   xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-  xhr.send("username="+username+"&password="+password);
+  xhr.send("username=" + username + "&password=" + password);
 }

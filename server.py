@@ -150,15 +150,15 @@ def get_last_2nd_message_from_global() -> set:
 
 @socketio.on("client_message")
 def emit_to_everyone(message_data):
+    # message_data = "{username: <username>, message: <message>}"
+    insert_message_into_global(message_data)
+
     last_2nd_row = get_last_2nd_message_from_global()
 
     if not last_2nd_row:
         json_to_send = [{"username": "", "message": ""}, json.loads(message_data)]
     else:
         json_to_send = [{"username": last_2nd_row[0], "message": last_2nd_row[1]}, json.loads(message_data)]
-
-    # message_data = "{username: <username>, message: <message>}"
-    insert_message_into_global(message_data)
 
     socketio.emit("server_response", json.dumps(json_to_send))
 

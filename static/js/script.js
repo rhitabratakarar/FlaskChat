@@ -39,7 +39,7 @@ function validatePasswordAndRegister() {
     alert("Password must be of at least 6 characters.");
   }
 
-  else if (givenPassword.trim() == "" || confPassword.trim() == "" || username.trim() == "") {
+  else if (givenPassword == "" || confPassword == "" || username.trim() == "") {
     alert("Please fillup all the fields...");
   }
 
@@ -73,5 +73,5 @@ function validateUsernameAndPassword() {
 
   xhr.open("POST", url, true);
   xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-  xhr.send("username=" + username + "&password=" + password);
+  xhr.send("username=" + username.trim() + "&password=" + password);
 }

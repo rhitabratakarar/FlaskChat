@@ -15,7 +15,7 @@ function sendPostRequestToCurrentURL(data) {
     if (this.readyState == 4 && this.status == 200) {
       result.innerHTML = this.responseText;
     }
-    else if (this.status == 500) {
+    else if (this.readyState == 4 && this.status == 500) {
       result.innerHTML = "Username Exists.";
     }
     else {
@@ -33,13 +33,13 @@ function validatePasswordAndRegister() {
 
   var givenPassword = document.getElementById("password").value;
   var confPassword = document.getElementById("con_pass").value;
-  var username = document.getElementById("username").value;
+  var username = document.getElementById("username").value.trim();
 
   if (givenPassword.length < 6) {
     alert("Password must be of at least 6 characters.");
   }
 
-  else if (givenPassword == "" || confPassword == "" || username.trim() == "") {
+  else if (givenPassword == "" || confPassword == "" || username == "") {
     alert("Please fillup all the fields...");
   }
 
@@ -58,7 +58,7 @@ function validatePasswordAndRegister() {
 function validateUsernameAndPassword() {
   var xhr = new XMLHttpRequest();
   var result = document.getElementById("result");
-  var username = document.getElementById("username").value;
+  var username = document.getElementById("username").value.trim();
   var password = document.getElementById("password").value;
   var url = window.location.href;
 
@@ -73,5 +73,5 @@ function validateUsernameAndPassword() {
 
   xhr.open("POST", url, true);
   xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-  xhr.send("username=" + username.trim() + "&password=" + password);
+  xhr.send("username=" + username + "&password=" + password);
 }

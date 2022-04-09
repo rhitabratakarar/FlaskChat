@@ -17,15 +17,12 @@ class Database:
         self.connector.close()
 
     def append_message_into_global(self, username, message):
-        sql_query = f"""INSERT INTO
-                        GLOBAL
-                        VALUES ('{username}', '{message}');"""
-        self.execute(sql_query)
+        sql_query = "INSERT INTO GLOBAL VALUES (?, ?);"
+        self.cursor.execute(sql_query, (username, message))
 
     def create_user(self, username: str, password: str):
-        query = f""" INSERT INTO AUTH (Username, Password)
-                            VALUES ('{username}', '{password}'); """
-        self.execute(query)
+        query = "INSERT INTO AUTH VALUES (?, ?); "
+        self.cursor.execute(query, (username, password))
 
 
 database = Database()

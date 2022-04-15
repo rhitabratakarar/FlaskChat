@@ -140,7 +140,7 @@ def insert_message_into_global(message_data):
     del database
 
 
-def get_last_2nd_message_from_global() -> set:
+def get_last_2nd_message_from_global() -> tuple:
     database = Database()
     database.execute('select * from global order by rowid desc limit 1,1')
     last_2nd_row = database.cursor.fetchone()
@@ -153,7 +153,7 @@ def emit_to_everyone(message_data):
     # message_data = "{username: <username>, message: <message>}"
     insert_message_into_global(message_data)
 
-    last_2nd_row = get_last_2nd_message_from_global()
+    last_2nd_row:tuple = get_last_2nd_message_from_global()
 
     if not last_2nd_row:
         json_to_send = [{"username": "", "message": ""}, json.loads(message_data)]
@@ -190,5 +190,5 @@ def response_for_older_messages():
 
 if __name__ == "__main__":
     # socket created at default port = 5000
-    socketio.server.eio.async_mode = "threading"
+    # socketio.server.eio.async_mode = "threading"
     socketio.run(application, debug=True)

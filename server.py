@@ -1,12 +1,12 @@
-from flask import Flask, render_template, url_for
-from flask_socketio import SocketIO
-from flask import request, session, redirect
-from database import Database
-from dotenv import load_dotenv
 import json
 import os
 import sqlite3
 
+from dotenv import load_dotenv
+from flask import Flask, redirect, render_template, request, session, url_for
+from flask_socketio import SocketIO
+
+from database import Database
 
 load_dotenv()
 SECRET_KEY = "SECRET_KEY"
@@ -37,20 +37,6 @@ def correct_credentials(*creds) -> bool:
     return True if db_creds else False
 
 
-def wrong_creds_page() -> str:
-    return """<!DOCTYPE html>
-        <html>
-            <head>
-                <title>Failure</title>
-            </head>
-            <body>
-                <h1>Wrong Credentials.</h1>
-                Click <a href="/login">here</a> to login again.
-            </body>
-        </html>
-    """
-
-
 def build_session_for_user(creds) -> None:
     session["username"] = creds[0]
 
@@ -58,17 +44,7 @@ def build_session_for_user(creds) -> None:
 def create_new_user(*creds) -> None:
     database = Database()
     database.create_user(creds[0], creds[1])
-    print("user created")
     database.commit_and_close_connection()
-
-
-def get_page(page_data) -> str:
-    return f"""<!DOCTYPE html>
-                <html>
-                <head><title>error</title><head>
-                <body><h1>{page_data}</h1></body>
-                </html>
-            """
 
 
 @application.route("/")
@@ -134,7 +110,8 @@ def insert_message_into_global(message_data):
     message_data = json.loads(message_data)
 
     database = Database()
-    database.append_message_into_global(message_data['username'], message_data["message"])
+    database.append_message_into_global(
+        message_data['username'], message_data["message"])
     database.commit_and_close_connection()
 
     del database
@@ -153,12 +130,14 @@ def emit_to_everyone(message_data):
     # message_data = "{username: <username>, message: <message>}"
     insert_message_into_global(message_data)
 
-    last_2nd_row:tuple = get_last_2nd_message_from_global()
+    last_2nd_row: tuple = get_last_2nd_message_from_global()
 
     if not last_2nd_row:
-        json_to_send = [{"username": "", "message": ""}, json.loads(message_data)]
+        json_to_send = [{"username": "", "message": ""},
+                        json.loads(message_data)]
     else:
-        json_to_send = [{"username": last_2nd_row[0], "message": last_2nd_row[1]}, json.loads(message_data)]
+        json_to_send = [{"username": last_2nd_row[0],
+                         "message": last_2nd_row[1]}, json.loads(message_data)]
 
     socketio.emit("server_response", json.dumps(json_to_send))
 
@@ -180,7 +159,8 @@ def get_converted_json_messages(messages) -> str:
 
 @socketio.on("request_for_older_messages")
 def response_for_older_messages():
-    all_messages = get_all_messages()  # ((username, message), (username, message), ...)
+    # ((username, message), (username, message), ...)
+    all_messages = get_all_messages()
 
     json_messages = get_converted_json_messages(all_messages)
 
